@@ -1,24 +1,24 @@
-from flask import Flask
+from flask import Flask, render_template
 from markupsafe import escape
 
 app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return "Hello! this is the home page, this page will also ask what song you want to find recommendations for"
+    return render_template("home.html")
 
 @app.route('/user/<username>')
 def show_user_profile(username):
     # show the user profile for that user
-    return f'User {escape(username)}'
+    return render_template("user.html", user = username)
 
-@app.route("/recent")
-def recent_sh():
-    return "Recent Search History will be displayed here"
+@app.route("/history")
+def search_history():
+    return render_template("search_history.html")
 
 @app.route("/saved")
 def saved_songs():
-    return "Saved songs will be displayed here"
+    return render_template("saved.html")
 
 if __name__ == "__main__":
     app.run()
