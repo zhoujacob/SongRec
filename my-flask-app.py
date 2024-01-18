@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 from markupsafe import escape
 
 app = Flask(__name__)
@@ -8,9 +8,16 @@ app = Flask(__name__)
 def home():
     return render_template("home.html")
 
-@app.route('/user/<username>')
+@app.route("/login", methods = ["POST", "GET"])
+def login():
+    if request.method == "POST":
+        user = request.form["nm"]
+        return redirect(url_for("show_user_profile", username = user))
+    else:
+        return render_template("login.html")
+    
+@app.route("/<username>")
 def show_user_profile(username):
-    # show the user profile for that user
     return render_template("user.html", user = username)
 
 @app.route("/history")
