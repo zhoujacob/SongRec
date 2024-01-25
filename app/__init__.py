@@ -1,4 +1,6 @@
 from flask import Flask
+import psycopg2
+
 
 def create_app():
     app = Flask(__name__)
