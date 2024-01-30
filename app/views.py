@@ -1,4 +1,6 @@
+import psycopg2 
 from flask import Blueprint, render_template, request, redirect, url_for
+from scripts.init_db import show_users
 
 views = Blueprint("views", __name__)
 
@@ -18,3 +20,8 @@ def search_history():
 @views.route("/saved")
 def saved_songs():
     return render_template("saved.html")
+
+@views.route("/all_users")
+def show_all_users():
+    users = show_users()
+    return render_template("all_users.html", users = users)
