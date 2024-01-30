@@ -1,6 +1,5 @@
 import psycopg2 
 from flask import Blueprint, render_template, request, redirect, url_for
-from scripts.init_db import show_users
 
 views = Blueprint("views", __name__)
 
