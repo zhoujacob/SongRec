@@ -34,11 +34,12 @@ def sign_up():
         elif len(password1) < 7:
             flash('Password must be at least 7 characters long', category = 'error') 
         else: 
-            # default hashihng algorithm through the werkzeug security import
+            # sha265 hashihng algorithm through the werkzeug security import
             new_user = User(email = email, first_name = first_Name, password = generate_password_hash(password1, method='pbkdf2:sha256', salt_length=8))
             db.session.add(new_user)
             db.session.commit()
             flash('Account created!', category = 'success')
+            # Redirect to home page after created
             return redirect(url_for('views.home'))
         return render_template("sign-up.html")
     else:
