@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user 
+# from . import get_token, get_auth_header
 
 views = Blueprint("views", __name__)
 
@@ -10,8 +11,15 @@ views = Blueprint("views", __name__)
 def home():
     if request.method == 'POST':
         song = request.form['search-bar']
+        # token = get_token()
+        # auth_header = get_auth_header(token)
+        # recommendations = get_recommendations(auth_header)
         return render_template('home.html',user = current_user, song = song)
     return render_template("home.html", user = current_user)
+
+# @views.route("/search")
+# def search():
+
     
 @views.route("/<username>")
 @login_required
