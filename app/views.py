@@ -8,10 +8,10 @@ views = Blueprint("views", __name__)
 @views.route("/home")
 @login_required
 def home():
-    # if request.method == 'POST':
-    #     song = request.form['search-bar']
-    #     flash('Enter.', category='success')
-    #     return render_template('index.html',song = song)
+    if request.method == 'POST':
+        song = request.form['search-bar']
+        flash('Enter.', category='success')
+        return render_template('index.html',song = song)
     return render_template("home.html", user = current_user)
     
 @views.route("/<username>")
