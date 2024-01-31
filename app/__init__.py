@@ -3,15 +3,17 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 from flask_login import LoginManager
+import base64
+from requests import post
+import json
 
 db = SQLAlchemy()
+load_dotenv()  
+
 
 def create_app():
     app = Flask(__name__)
-    
-    # Load environment variables from .env file
-    load_dotenv()  
-    
+
     # Get environment variables
     DB_USER = os.getenv('DB_USER')
     DB_PASSWORD = os.getenv('DB_PASSWORD')
