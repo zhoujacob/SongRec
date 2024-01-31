@@ -8,14 +8,13 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
 
+# class for saved songs 
+# class saved(db.Model):
+#     id = db.Column(db.Integer, priamry_key = True)
+#     song = db.Column(db.String(100), unique = True)
+#     date = db.Column(db.DateTime(timezone = True), default = func.now())
+#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
 def create_database():
     db.create_all()  # Create the database tables
     print('Created Database!')
-
-
-# class for saved history
-# class Note(db.Model):
-    # id = db.Column(db.Integer, priamry_key = True)
-    # data = db.Column
-    # date = db.Column(db.DateTime(timezone = True), default = func.now())
-    # user_id = db.Column(db.Integer, db.ForeignKey('user.id'))

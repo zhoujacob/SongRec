@@ -10,7 +10,6 @@ views = Blueprint("views", __name__)
 def home():
     if request.method == 'POST':
         song = request.form['search-bar']
-        flash('Enter.', category='success')
         return render_template('home.html',user = current_user, song = song)
     return render_template("home.html", user = current_user)
     
