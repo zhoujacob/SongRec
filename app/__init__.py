@@ -2,6 +2,7 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
+from flask_login import LoginManager
 
 db = SQLAlchemy()
 
@@ -30,6 +31,7 @@ def create_app():
     # Register blueprints
     from .views import views
     from .auth import auth 
+    
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
     
@@ -39,4 +41,14 @@ def create_app():
         from . import models
         models.create_database()  # Initialize the database
 
+    login_manager = LoginManager()
+    # If user is not logged in
+    login_manager.login_view = 'auth.login'
+    login_manager.init_app(app)
+
+    # Retrieves the ID of the user
+    @login_manager.user_loader
+    def load_user(id):
+        return User.query.get(int(id))
+    
     return app
