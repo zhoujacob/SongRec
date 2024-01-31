@@ -30,7 +30,8 @@
         <div class="navbar-nav">
           {% if user.is_authenticated %}
           <a class="nav-item nav-link" id="home" href="/home">Home</a>
-          <a class="nav-item nav-link" id="history" href="/search_history">Search History</a>
+          <a class="nav-item nav-link" id="history" href="/history">Search History</a>
+          <a class="nav-item nav-link" id="saved" href="/saved">Saved Songs</a>
           <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
           {% else %}
           <a class="nav-item nav-link" id="login" href="/login">Login</a>
@@ -60,7 +61,7 @@
         {% endif %} 
       {% endfor %} 
     {% endif %} 
-    {% endwith %}
+    {% endwith %} 
       
     <div class = "container">{% block content %}{% endblock %}</div>
 

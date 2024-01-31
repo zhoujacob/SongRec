@@ -1,5 +1,4 @@
-import psycopg2 
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user 
 
 views = Blueprint("views", __name__)
@@ -9,6 +8,10 @@ views = Blueprint("views", __name__)
 @views.route("/home")
 @login_required
 def home():
+    # if request.method == 'POST':
+    #     song = request.form['search-bar']
+    #     flash('Enter.', category='success')
+    #     return render_template('index.html',song = song)
     return render_template("home.html", user = current_user)
     
 @views.route("/<username>")
@@ -19,9 +22,9 @@ def show_user_profile(username):
 @views.route("/history")
 @login_required
 def search_history():
-    return render_template("search_history.html")
+    return render_template("search_history.html", user = current_user)
 
 @views.route("/saved")
 @login_required
 def saved_songs():
-    return render_template("saved.html")
+    return render_template("saved.html", user = current_user)

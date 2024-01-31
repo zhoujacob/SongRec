@@ -1,5 +1,17 @@
 {% extends "base.html" %}
 {% block title %} Home Page {% endblock %}
 {% block content %}
-    <p> This is the home Page</p>
+    <div class = "search">
+        <div class = "col-md-8">
+            <form>
+                <label for= "search-bar"> Input a song: </label><br>
+                <input type = "text" id = "search-bar" name = "search-bar"><br>
+                <input type= "submit" value = "Submit">
+            </form>
+            {% if song %}
+            <p>You searched for: {{ song }}</p>
+            {% endif %}
+        </div>
+    </div>
+    <p> Roger, NGL, I DON'T KNOW WHY IT'S BREAKING HALF THE TIME LOL</p>
 {% endblock %}
