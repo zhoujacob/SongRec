@@ -17,9 +17,13 @@
     <br>
     <div align="center">
         <ul>
-            {% for recommendation in recommendations %}
-                <li>{{ recommendation.name }} by {{ recommendation.artists[0].name }}</li>
-            {% endfor %}
+            {% if songs %}
+                {% for song in songs %}
+                    <li>{{ song.name }} by {{ song.artist }}</li>
+                {% endfor %}
+            {% else %}
+                <li>No songs available.</li>
+            {% endif %}
         </ul>
     </div>
 {% endblock %}

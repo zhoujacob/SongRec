@@ -35,22 +35,18 @@ def get_auth_header(token):
 def get_song(token, song_name):
     url = "https://api.spotify.com/v1/search"
     headers = get_auth_header(token)
-    query = f"?q={song_name}&type=track&limit=1"
+    query = f"?q={song_name}&type=track&limit=5"
 
     query_url = url + query
     result = get(query_url, headers=headers)
     json_result = json.loads(result.content)["tracks"]["items"]
+    
     if len(json_result) == 0:
-        print ("No song with this name exists...")
+        print("No songs with this name exist...")
         return None
     
-    return json_result[0]
-
-token = get_token()
-result = get_song(token, "Fast Car")
-print(result["name"])
-song_id = result["id"]
-print(song_id)
+    songs = [{"name": item["name"], "artist": item["artists"][0]["name"]} for item in json_result]
+    return [songs]
 
 # # format should be:
 # # http GET 'https://api.spotify.com/v1/recommendations?seed_artists=4NHQUGzhtTLFvgF5SZesLK&seed_genres=classical%2Ccountry&seed_tracks=0c6xIDDpzE81m2q797ordA' \
