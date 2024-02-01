@@ -3,9 +3,6 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 from flask_login import LoginManager
-import base64
-from requests import post
-import json
 
 db = SQLAlchemy()
 load_dotenv()  

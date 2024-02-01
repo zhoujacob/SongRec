@@ -15,12 +15,11 @@
         </div>
     </div>
     <br>
-    <div align = "center">
+    <div align="center">
         <ul>
             {% for recommendation in recommendations %}
-                <li>{{ recommendation }}</li>
+                <li>{{ recommendation.name }} by {{ recommendation.artists[0].name }}</li>
             {% endfor %}
         </ul>
-        <p> FK ROGER LOL, SOMETGHING WITH USER AUTHEN MESSED IT UP</p>
     </div>
 {% endblock %}
