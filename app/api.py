@@ -45,7 +45,7 @@ def get_song(token, song_name):
         print("No songs with this name exist...")
         return None
 
-    songs = [{"name": item["name"], "artist": item["artists"][0]["name"]} for item in json_result]
+    songs = [{"id": item["id"], "name": item["name"], "artist": item["artists"][0]["name"]} for item in json_result]
     return songs  # Return the list directly, not wrapped in another list
 
 

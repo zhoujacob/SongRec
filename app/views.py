@@ -10,22 +10,25 @@ views = Blueprint("views", __name__)
 @login_required
 def home():
     songs = None
-    selected_song = None
+    selected_song = request.args.get('selected_song')
 
     if request.method == 'POST':
-        # Check if the search form is submitted
+        # Handle the search form as before
         if 'search-bar' in request.form:
             song_name = request.form['search-bar']
             token = get_token()
             songs = get_song(token, song_name)
 
-        # Check if a song is selected
-        elif 'selected_song' in request.form:
-            selected_song = request.form['selected_song']
+    return render_template('home.html', user=current_user, songs=songs, selected_song=selected_song)
 
-        return render_template('home.html', user=current_user, songs=songs, selected_song = selected_song) 
-    return render_template("home.html", user = current_user)
+@views.route("/select_song", methods=["POST"])
+@login_required
+def select_song():
+    selected_song_id = request.form['selected_song']
+    token = get_token()
+    selected_song_details = get_song(token, selected_song_id)
 
+    return redirect(url_for('views.home', selected_song=selected_song_details))
     
 @views.route("/<username>")
 @login_required
