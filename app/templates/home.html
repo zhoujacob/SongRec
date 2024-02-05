@@ -2,28 +2,35 @@
 {% block title %} Home Page {% endblock %}
 {% block content %}
     <h1 align= "center"> Jacob's Song Recommender </h1>
-    <div class = "search", align = "center">
-        <div class = "col-md-8">
-            <form method = "post" action = "{{ url_for('views.home') }}">
-                <label for= "search-bar"> Input a song: </label><br>
-                <input type = "text" id = "search-bar" name = "search-bar"><br>
-                <input type= "submit" value= "Submit">
-            </form>
-            {% if song %}
-            <p>You searched for: {{ song }}</p>
-            {% endif %}
-        </div>
-    </div>
-    <br>
     <div align="center">
-        <ul>
-            {% if songs %}
-                {% for song in songs %}
-                    <li>{{ song.name }} by {{ song.artist }}</li>
-                {% endfor %}
-            {% else %}
-                <li>No songs available.</li>
+        <form method="post" action="{{ url_for('views.home') }}">
+            <label for="search-bar">Input a song:</label><br>
+            <input type="text" id="search-bar" name="search-bar"><br>
+            <input type="submit" value="Submit">
+        </form>
+    
+        <form method="post" action="{{ url_for('views.home') }}">
+            <ul>
+                {% if songs %}
+                    {% for song in songs %}
+                        <li>
+                            <button type="submit" name="selected_song" value="{{ song.name }}">
+                                {{ song.name }} by {{ song.artist }}
+                            </button>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <li>No songs available.</li>
+                {% endif %}
+            </ul>
+        </form>
+    </div>
+    <div align="center">
+        <h3>Selected Song: 
+            {% if selected_song %}
+                {{ selected_song }}
+            {% else %}None
             {% endif %}
-        </ul>
+        </h3>
     </div>
 {% endblock %}

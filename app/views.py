@@ -10,13 +10,20 @@ views = Blueprint("views", __name__)
 @login_required
 def home():
     songs = None
+    selected_song = None
 
     if request.method == 'POST':
-        song_name = request.form['search-bar']
-        token = get_token()
-        songs = get_song(token, song_name)
+        # Check if the search form is submitted
+        if 'search-bar' in request.form:
+            song_name = request.form['search-bar']
+            token = get_token()
+            songs = get_song(token, song_name)
 
-        return render_template('home.html', user=current_user, songs=songs) 
+        # Check if a song is selected
+        elif 'selected_song' in request.form:
+            selected_song = request.form['selected_song']
+
+        return render_template('home.html', user=current_user, songs=songs, selected_song = selected_song) 
     return render_template("home.html", user = current_user)
 
     
