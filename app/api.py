@@ -44,9 +44,10 @@ def get_song(token, song_name):
     if len(json_result) == 0:
         print("No songs with this name exist...")
         return None
-    
+
     songs = [{"name": item["name"], "artist": item["artists"][0]["name"]} for item in json_result]
-    return [songs]
+    return songs  # Return the list directly, not wrapped in another list
+
 
 # # format should be:
 # # http GET 'https://api.spotify.com/v1/recommendations?seed_artists=4NHQUGzhtTLFvgF5SZesLK&seed_genres=classical%2Ccountry&seed_tracks=0c6xIDDpzE81m2q797ordA' \

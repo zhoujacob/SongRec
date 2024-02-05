@@ -16,7 +16,7 @@ def home():
         token = get_token()
         songs = get_song(token, song_name)
 
-        return render_template('home.html',user = current_user, song = songs)
+        return render_template('home.html', user=current_user, songs=songs) 
     return render_template("home.html", user = current_user)
 
     
