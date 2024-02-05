@@ -48,29 +48,16 @@ def get_song(token, song_name):
     songs = [{"id": item["id"], "name": item["name"], "artist": item["artists"][0]["name"]} for item in json_result]
     return songs  # Return the list directly, not wrapped in another list
 
+def get_recommendations(token, seed_artist, seed_track):
+    url = "https://api.spotify.com/v1/recommendations"
+    headers = get_auth_header(token)
+    query = f"?seed_artists={seed_artist}&seed_tracks={seed_track}"
 
-# # format should be:
-# # http GET 'https://api.spotify.com/v1/recommendations?seed_artists=4NHQUGzhtTLFvgF5SZesLK&seed_genres=classical%2Ccountry&seed_tracks=0c6xIDDpzE81m2q797ordA' \
-# #  Authorization:'Bearer 1POdFZRZbvb...qqillRxMr2z' 
-# def get_recommendations(token, seed_artists=None, seed_genres=None, seed_tracks=None):
-#     url = "https://api.spotify.com/v1/recommendations"
-
-#     headers = get_auth_header(token)
-#     params = {
-#         'seed_tracks': ','.join(seed_tracks) if seed_tracks else None,
-#         'seed_artists': ','.join(seed_artists) if seed_artists else None,
-#         'seed_genres': ','.join(seed_genres) if seed_genres else None
-#     }
-
-#     response = requests.get('https://api.spotify.com/v1/recommendations', headers=headers, params=params)
+    query_url = url + query 
+    result = get(query_url, headers=headers)
     
-#     if response.status_code == 200:
-#         json_result = response.json()
-#         print(json_result)
-#     else:
-#         print("Error:", response.status_code)
-
-
-
-# # seed_tracks = ["0c6xIDDpzE81m2q797ordA"]  # Example Spotify track ID
-# # get_recommendations(token, seed_tracks)
+    json_result = json.loads(result.content)["tracks"]["items"]
+    
+    if len(json_result) == 0:
+        print("No songs with this name exist...")
+        return None

@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user 
-from .api import get_token, get_song
+from .api import get_token, get_song, get_recommendations
 
 views = Blueprint("views", __name__)
 
@@ -10,7 +10,7 @@ views = Blueprint("views", __name__)
 @login_required
 def home():
     songs = None
-    selected_song = request.args.get('selected_song')
+    selected_song = request.args.get('selected_song_details')
 
     if request.method == 'POST':
         # Handle the search form as before
@@ -28,8 +28,21 @@ def select_song():
     token = get_token()
     selected_song_details = get_song(token, selected_song_id)
 
-    return redirect(url_for('views.home', selected_song=selected_song_details))
+    return redirect(url_for('views.home', user=current_user, selected_song_details=selected_song_details))
+
+@views.route("/recommendations", methods = ["GET", "POST"])
+@login_required
+def recommendations():
+    # selected_song_details = request.form.get['selected_song_details']
+    # token = get_token()
+
+    # seed_artist = selected_song_details.get('artist')
+    # seed_track = selected_song_details.get('id')
+
+    # rec = get_recommendations(token, seed_artist, seed_track)
     
+    return render_template('recommendations.html', user = current_user)
+
 @views.route("/<username>")
 @login_required
 def show_user_profile(username):
