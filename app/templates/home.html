@@ -29,18 +29,13 @@
         {% endif %}
     </div>
     <div align="center">
-        <h3>Selected Song: 
-            {% if selected_song %}
-                {{ selected_song }}
-            {% else %}
-                None
-            {% endif %}
-        </h3>
         {% if selected_song %}
             <!-- Form for getting recommendations -->
             <form method="post" action="{{ url_for('views.recommendations') }}" name="get-recommendations-form">
                 <input type="hidden" name="selected_song_details" value="{{ selected_song | tojson }}">
-                <input type="submit" name="get-recommendations-button" value="Get Recommendations">
+                <button type="submit">
+                    Get Recommendation for {{ selected_song | tojson}}
+                </button>
             </form>
         {% endif %}
     </div>

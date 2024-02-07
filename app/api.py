@@ -61,3 +61,5 @@ def get_recommendations(token, seed_artist, seed_track):
     if len(json_result) == 0:
         print("No songs with this name exist...")
         return None
+    
+    return json_result

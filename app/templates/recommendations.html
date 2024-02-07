@@ -1,5 +1,19 @@
 {% extends "base.html" %}
-{% block title %} Home Page {% endblock %}
+{% block title %} Recommendations {% endblock %}
 {% block content %}
-    <h1 align="center"> Recommendation's Displayed Here </h1>
+    <h1 align="center"> Recommendations </h1>
+    <div align="center">
+        <h2>Recommended Songs</h2>
+        <ul>
+            {% if recommendations %}
+                {% for song in recommendations %}
+                    <li>
+                        <strong>{{ song.name }}</strong> by {{ song.artists[0].name }}
+                    </li>
+                {% endfor %}
+            {% else %}
+                <li>No recommendations available.</li>
+            {% endif %}
+        </ul>
+    </div>
 {% endblock %}
