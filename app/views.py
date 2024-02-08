@@ -1,7 +1,6 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, json
 from flask_login import login_required, current_user 
 from .api import get_token, get_song, get_recommendations
-import json
 
 views = Blueprint("views", __name__)
 
@@ -39,20 +38,25 @@ def recommendations():
         selected_song_details = request.form['selected_song_details']
         flash(selected_song_details)
 
-        if selected_song_details:
-            selected_song = json.loads(selected_song_details)
-            token = get_token()
-            seed_artist = selected_song.get('artist')
-            seed_track = selected_song.get('id')
+        seed_artist = selected_song_details['artist']
+        flash(seed_artist)
 
-            rec = get_recommendations(token, seed_artist, seed_track)
-            if rec is None:
-                flash("No recommendations available for this song.")
-                return redirect(url_for('views.home'))
+        return redirect(url_for('views.home'))
 
-            return render_template('recommendations.html', user=current_user, recommendations=rec)
-        else:
-            return redirect(url_for('views.home'))
+        # if selected_song_details:
+        #     selected_song = json.loads(selected_song_details)
+        #     token = get_token()
+        #     seed_artist = selected_song.get('artist')
+        #     seed_track = selected_song.get('id')
+
+        #     rec = get_recommendations(token, seed_artist, seed_track)
+        #     if rec is None:
+        #         flash("No recommendations available for this song.")
+        #         return redirect(url_for('views.home'))
+
+        #     return render_template('recommendations.html', user=current_user, recommendations=rec)
+        # else:
+        #     return redirect(url_for('views.home'))
     else:
         flash("Invalid request method.")
         return redirect(url_for('views.home'))
