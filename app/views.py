@@ -13,12 +13,11 @@ def home():
     selected_song = request.args.get('selected_song_details')
 
     if request.method == 'POST':
-        # Handle the search form as before
+        # Handle the search form
         if 'search-bar' in request.form:
             song_name = request.form['search-bar']
             token = get_token()
             songs = get_song(token, song_name)
-    flash(selected_song)
     return render_template('home.html', user=current_user, songs=songs, selected_song=selected_song)
 
 @views.route("/select_song", methods=["POST"])
@@ -28,26 +27,22 @@ def select_song():
     token = get_token()
     selected_song_details = get_song(token, selected_song_id)
 
+    # Goes back to home page with selected song
     return redirect(url_for('views.home', user=current_user, selected_song_details=selected_song_details))
 
 @views.route("/recommendations", methods=["GET", "POST"])
 @login_required
 def recommendations():
-
-    # FIGURE THIS OUT 
-
     if request.method == "POST":
         selected_song_details_json = request.form['selected_song_details'].replace("'", '"')
         selected_song_details = json.loads(selected_song_details_json)
 
         if selected_song_details:
             token = get_token()
-
+            
             seed_artist = selected_song_details['artist_uri']
             seed_track = selected_song_details['id']
 
-            flash(seed_artist)
-            flash(seed_track)
             rec = get_recommendations(token, seed_artist, seed_track)
             if rec is None:
                 flash("No recommendations available for this song.")
