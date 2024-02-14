@@ -18,7 +18,7 @@ def home():
             song_name = request.form['search-bar']
             token = get_token()
             songs = get_song(token, song_name)
-
+    flash(selected_song)
     return render_template('home.html', user=current_user, songs=songs, selected_song=selected_song)
 
 @views.route("/select_song", methods=["POST"])
@@ -33,30 +33,29 @@ def select_song():
 @views.route("/recommendations", methods=["GET", "POST"])
 @login_required
 def recommendations():
-    if request.method == "POST":
-        flash(request.form)
-        selected_song_details = request.form['selected_song_details']
-        flash(selected_song_details)
 
-        seed_artist = selected_song_details['artist']
-        flash(seed_artist)
+    # FIGURE THIS OUT 
+
+    if request.method == "POST":
+        selected_song_details_json = request.form['selected_song_details'].replace("'", '"')
+        selected_song_details = json.loads(selected_song_details_json)
+
+        if selected_song_details:
+            token = get_token()
+
+            seed_artist = selected_song_details['artist_uri']
+            seed_track = selected_song_details['id']
+
+            flash(seed_artist)
+            flash(seed_track)
+            rec = get_recommendations(token, seed_artist, seed_track)
+            if rec is None:
+                flash("No recommendations available for this song.")
+                return redirect(url_for('views.home'))
+            
+            return render_template('recommendations.html', user = current_user, recommendations = rec)
 
         return redirect(url_for('views.home'))
-
-        # if selected_song_details:
-        #     selected_song = json.loads(selected_song_details)
-        #     token = get_token()
-        #     seed_artist = selected_song.get('artist')
-        #     seed_track = selected_song.get('id')
-
-        #     rec = get_recommendations(token, seed_artist, seed_track)
-        #     if rec is None:
-        #         flash("No recommendations available for this song.")
-        #         return redirect(url_for('views.home'))
-
-        #     return render_template('recommendations.html', user=current_user, recommendations=rec)
-        # else:
-        #     return redirect(url_for('views.home'))
     else:
         flash("Invalid request method.")
         return redirect(url_for('views.home'))

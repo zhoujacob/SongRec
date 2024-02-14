@@ -45,7 +45,11 @@ def get_song(token, song_name):
         print("No songs with this name exist...")
         return None
 
-    songs = [{"id": item["id"], "name": item["name"], "artist": item["artists"][0]["name"]} for item in json_result]
+    songs = [{"id": item["id"], 
+          "name": item["name"], 
+          "artist": item["artists"][0]["name"], 
+          "artist_uri" : item["artists"][0]["uri"].split(":")[-1].split("/")[-1]} 
+         for item in json_result]
     return songs  # Return the list directly, not wrapped in another list
 
 def get_recommendations(token, seed_artist, seed_track):
@@ -56,10 +60,14 @@ def get_recommendations(token, seed_artist, seed_track):
     query_url = url + query 
     result = get(query_url, headers=headers)
     
-    json_result = json.loads(result.content)["tracks"]["items"]
+    json_result = json.loads(result.content)["tracks"]
     
     if len(json_result) == 0:
         print("No songs with this name exist...")
         return None
     
-    return json_result
+    recommendations = [{
+          "name": item["name"], 
+          "artist": item["artists"][0]["name"]} 
+         for item in json_result]
+    return recommendations  # Return the list directly, not wrapped in another list

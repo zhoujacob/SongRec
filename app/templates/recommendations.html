@@ -8,7 +8,7 @@
             {% if recommendations %}
                 {% for song in recommendations %}
                     <li>
-                        <strong>{{ song.name }}</strong> by {{ song.artists[0].name }}
+                        <strong>{{ song.name }}</strong> by {{ song.artist }}
                     </li>
                 {% endfor %}
             {% else %}
