@@ -34,12 +34,14 @@ def select_song():
 @login_required
 def recommendations():
     if request.method == "POST":
+        # to propert JSON Format
         selected_song_details_json = request.form['selected_song_details'].replace("'", '"')
+        # Converts JSON string to a Python Dictionary
         selected_song_details = json.loads(selected_song_details_json)
 
         if selected_song_details:
             token = get_token()
-            
+
             seed_artist = selected_song_details['artist_uri']
             seed_track = selected_song_details['id']
 

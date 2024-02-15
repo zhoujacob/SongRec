@@ -1,7 +1,6 @@
 import os
 import base64
 import json
-import requests
 
 from dotenv import load_dotenv
 from requests import post, get
