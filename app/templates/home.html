@@ -12,7 +12,7 @@
         {% if not selected_song %}
             <!-- Form for selecting a song -->
             <form method="post" action="{{ url_for('views.select_song') }}" name="select-song-form">
-                <ul>
+                <ul class = "songlist">
                     {% if songs %}
                         {% for song in songs %}
                             <li>
