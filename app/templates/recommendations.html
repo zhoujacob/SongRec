@@ -1,21 +1,24 @@
 {% extends "base.html" %}
 {% block title %} Recommendations {% endblock %}
+
 {% block content %}
-    <h1 align="center"> Recommendations </h1>
+    <h1 align="center"> Recommended Songs </h1>
     <div align="center">
-        <h2>Recommended Songs</h2>
-        <ul class = "recommendlist">
-            {% if recommendations %}
-                {% for song in recommendations %}
-                    <li>
-                        <button type="submit" name="saved_song" value="{{ song }}">
+        <form id="recommendationsForm" method="post" action="{{ url_for('views.save_song') }}">
+            <ul class="recommendlist">
+                {% if recommendations %}
+                    {% for song in recommendations %}
+                        <li>
                             <strong>{{ song.name }}</strong> by {{ song.artist }}
-                        </button>
-                    </li>
-                {% endfor %}
-            {% else %}
-                <li>No recommendations available.</li>
-            {% endif %}
-        </ul>
+                            <button type="submit" name="saved_song_details" value="{{ song }}">
+                                Save
+                            </button>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <li>No recommendations available.</li>
+                {% endif %}
+            </ul>
+        </form>
     </div>
 {% endblock %}

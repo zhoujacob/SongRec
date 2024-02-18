@@ -2,4 +2,17 @@
 {% block title %} Home Page {% endblock %}
 {% block content %}
     <p> Saved songs will be displayed here </p>
+
+    <!-- <ul class = "savedsonglist">
+        {% if savedsongs %}
+            {% for song in savedsongs %}
+                <li>
+                    {{ song.name }} by {{ song.artist }}
+                </li>
+            {% endfor %}
+        {% else %}
+            <li>No songs available.</li>
+        {% endif %}
+    </ul> -->
+    
 {% endblock %}

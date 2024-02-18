@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, json
 from flask_login import login_required, current_user 
 from .api import get_token, get_song, get_recommendations
+from .models import Saved, get_db_connection
+from . import db
 
 views = Blueprint("views", __name__)
 
@@ -53,11 +55,36 @@ def recommendations():
             return render_template('recommendations.html', user = current_user, recommendations = rec)
 
         return redirect(url_for('views.home'))
-    else:
-        flash("Invalid request method.")
-        return redirect(url_for('views.home'))
-
-@views.route("/saved")
+    return render_template("recommendations.html", user = current_user)
+    
+@views.route("/save_song", methods=["POST"])
 @login_required
-def saved_songs():
-    return render_template("saved.html", user = current_user)
+def save_song():
+    if request.method == 'POST':
+        saved_song_details_json = request.form['saved_song_details'].replace("'", '"')
+        saved_song_details = json.loads(saved_song_details_json)
+
+        flash(saved_song_details)
+        if saved_song_details:
+            song_name = saved_song_details['name']
+            artist_name = saved_song_details['artist']
+
+            new_saved_song = Saved(song=song_name, artist=artist_name, user_id=current_user.id)
+            db.session.add(new_saved_song)
+            db.session.commit()
+            flash('Song Added!', category='success')
+    # Goes back to home page with selected song
+    return redirect(url_for('views.recommendations', user = current_user))
+
+
+@views.route("/history", methods=["GET", "POST"])
+@login_required
+def history():
+    if request.method == "POST":
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute('SELECT * FROM Saved;')
+        savedsongs = cur.fetchall()
+        cur.close()
+        conn.close()
+    return render_template("saved.html", user =current_user, savedsongs = savedsongs)
