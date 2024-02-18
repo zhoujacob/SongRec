@@ -25,7 +25,7 @@ class Saved(db.Model):
 def get_db_connection():
     conn = psycopg2.connect(host='localhost',
                             database = os.environ['DB_NAME'],
-                            user = os.environ['DB_USERNAME'],
+                            user = os.environ['DB_USER'],
                             password = os.environ['DB_PASSWORD'])
     return conn
 

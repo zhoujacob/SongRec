@@ -1,18 +1,20 @@
 {% extends "base.html" %}
 {% block title %} Home Page {% endblock %}
 {% block content %}
-    <p> Saved songs will be displayed here </p>
+    <h1 align="center"> Saved Songs </h1>
 
-    <!-- <ul class = "savedsonglist">
-        {% if savedsongs %}
-            {% for song in savedsongs %}
-                <li>
-                    {{ song.name }} by {{ song.artist }}
-                </li>
-            {% endfor %}
-        {% else %}
-            <li>No songs available.</li>
-        {% endif %}
-    </ul> -->
-    
+    <div align = "center">
+        <ul class = "savedsonglist">
+            {% if savedsongs %}
+                {% for song in savedsongs %}
+                    <li>
+                        {{ song[1] }} by {{ song[2] }}
+                    </li>
+                {% endfor %}
+            {% else %}
+                <li>No songs available.</li>
+            {% endif %}
+        </ul>
+    </div>
+
 {% endblock %}

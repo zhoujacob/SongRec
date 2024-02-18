@@ -63,8 +63,7 @@ def save_song():
     if request.method == 'POST':
         saved_song_details_json = request.form['saved_song_details'].replace("'", '"')
         saved_song_details = json.loads(saved_song_details_json)
-
-        flash(saved_song_details)
+        
         if saved_song_details:
             song_name = saved_song_details['name']
             artist_name = saved_song_details['artist']
@@ -77,14 +76,13 @@ def save_song():
     return redirect(url_for('views.recommendations', user = current_user))
 
 
-@views.route("/history", methods=["GET", "POST"])
+@views.route("/history")
 @login_required
 def history():
-    if request.method == "POST":
-        conn = get_db_connection()
-        cur = conn.cursor()
-        cur.execute('SELECT * FROM Saved;')
-        savedsongs = cur.fetchall()
-        cur.close()
-        conn.close()
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM Saved;')
+    savedsongs = cur.fetchall()
+    cur.close()
+    conn.close()
     return render_template("saved.html", user =current_user, savedsongs = savedsongs)

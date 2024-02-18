@@ -1,9 +1,11 @@
 .songlist {
     list-style-type: none; /* This removes the bullet points */
   }
-  
 
 .recommendlist {
     list-style-type: none; /* This removes the bullet points */
 }
-  
+
+.savedsonglist{
+  list-style-type: none;
+}
