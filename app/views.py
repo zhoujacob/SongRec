@@ -57,16 +57,6 @@ def recommendations():
         flash("Invalid request method.")
         return redirect(url_for('views.home'))
 
-@views.route("/<username>")
-@login_required
-def show_user_profile(username):
-    return render_template("user.html", user = username)
-
-@views.route("/history")
-@login_required
-def search_history():
-    return render_template("search_history.html", user = current_user)
-
 @views.route("/saved")
 @login_required
 def saved_songs():

@@ -8,7 +8,9 @@
             {% if recommendations %}
                 {% for song in recommendations %}
                     <li>
-                        <strong>{{ song.name }}</strong> by {{ song.artist }}
+                        <button type="submit" name="saved_song" value="{{ song }}">
+                            <strong>{{ song.name }}</strong> by {{ song.artist }}
+                        </button>
                     </li>
                 {% endfor %}
             {% else %}

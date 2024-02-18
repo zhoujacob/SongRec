@@ -9,11 +9,11 @@ class User(db.Model, UserMixin):
     first_name = db.Column(db.String(150))
 
 # class for saved songs 
-# class saved(db.Model):
-#     id = db.Column(db.Integer, priamry_key = True)
-#     song = db.Column(db.String(100), unique = True)
-#     date = db.Column(db.DateTime(timezone = True), default = func.now())
-#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+class Saved(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    song = db.Column(db.String(100), unique = True)
+    date = db.Column(db.DateTime(timezone = True), default = func.now())
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 def create_database():
     db.create_all()  # Create the database tables
