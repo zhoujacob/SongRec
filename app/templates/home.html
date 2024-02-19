@@ -3,12 +3,15 @@
 {% block content %}
     <h1 align="center"> Jacob's Song Recommender </h1>
     <div align="center">
+        
+        {% if not submit %}
         <form method="post" action="{{ url_for('views.home') }}">
             <label for="search-bar">Input a song:</label><br>
             <input type="text" id="search-bar" name="search-bar"><br>
             <input type="submit" name="submit-button" value="Submit">
         </form>
-    
+        {% endif %}
+
         {% if not selected_song %}
             <!-- Form for selecting a song -->
             <form method="post" action="{{ url_for('views.select_song') }}" name="select-song-form">
@@ -21,8 +24,6 @@
                                 </button>
                             </li>
                         {% endfor %}
-                    {% else %}
-                        <li>No songs available.</li>
                     {% endif %}
                 </ul>
             </form>
@@ -30,13 +31,14 @@
     </div>
     <div align="center">
         {% if selected_song %}
-            <!-- Form for getting recommendations -->
             <form method="post" action="{{ url_for('views.recommendations') }}" name="get-recommendations-form">
                 <input type="hidden" name="selected_song_details" value="{{ selected_song }}">
                 <button type="submit">
-                    Get Recommendation for {{ selected_song }}
+                    Get Recommendation for {{ selected_song.name }} by {{ selected_song.artist }}
                 </button>
             </form>
         {% endif %}
     </div>
 {% endblock %}
+
+

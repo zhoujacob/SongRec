@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 from .api import get_token, get_song, get_recommendations
 from .models import Saved, get_db_connection
 from . import db
+import json
 
 views = Blueprint("views", __name__)
 
@@ -12,15 +13,24 @@ views = Blueprint("views", __name__)
 @login_required
 def home():
     songs = None
-    selected_song = request.args.get('selected_song_details')
+    selected_song_details = None
+
+    if(request.args.get('selected_song_details')):
+        submit = True
+        selected_song = request.args.get('selected_song_details').replace("'", '"')
+        selected_song_details = json.loads(selected_song)
+    else:
+        submit = False
 
     if request.method == 'POST':
         # Handle the search form
+        submit = True
         if 'search-bar' in request.form:
             song_name = request.form['search-bar']
             token = get_token()
             songs = get_song(token, song_name)
-    return render_template('home.html', user=current_user, songs=songs, selected_song=selected_song)
+    
+    return render_template('home.html', user=current_user, songs=songs, selected_song=selected_song_details, submit = submit)
 
 @views.route("/select_song", methods=["POST"])
 @login_required
@@ -28,9 +38,10 @@ def select_song():
     selected_song_id = request.form['selected_song']
     token = get_token()
     selected_song_details = get_song(token, selected_song_id)
+    submit = True
 
     # Goes back to home page with selected song
-    return redirect(url_for('views.home', user=current_user, selected_song_details=selected_song_details))
+    return redirect(url_for('views.home', user=current_user, selected_song_details=selected_song_details, submit = submit))
 
 @views.route("/recommendations", methods=["GET", "POST"])
 @login_required
@@ -63,7 +74,7 @@ def save_song():
     if request.method == 'POST':
         saved_song_details_json = request.form['saved_song_details'].replace("'", '"')
         saved_song_details = json.loads(saved_song_details_json)
-        
+
         if saved_song_details:
             song_name = saved_song_details['name']
             artist_name = saved_song_details['artist']
@@ -81,8 +92,9 @@ def save_song():
 def history():
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute('SELECT * FROM Saved;')
+
+    cur.execute('SELECT * FROM Saved WHERE user_id = %s;', (current_user.id,))
     savedsongs = cur.fetchall()
     cur.close()
     conn.close()
-    return render_template("saved.html", user =current_user, savedsongs = savedsongs)
+    return render_template("history.html", user =current_user, savedsongs = savedsongs)
