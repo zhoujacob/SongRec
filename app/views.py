@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, json
+from flask_wtf.csrf import generate_csrf
+from flask import Blueprint, render_template, request, flash, redirect, url_for, json, render_template_string
 from flask_login import login_required, current_user 
 from .api import get_token, get_song, get_recommendations
 from .models import Saved, get_db_connection
@@ -47,7 +48,7 @@ def select_song():
 @login_required
 def recommendations():
     if request.method == "POST":
-        # to propert JSON Format
+        # to proper JSON Format
         selected_song_details_json = request.form['selected_song_details'].replace("'", '"')
         # Converts JSON string to a Python Dictionary
         selected_song_details = json.loads(selected_song_details_json)
@@ -63,10 +64,13 @@ def recommendations():
                 flash("No recommendations available for this song.")
                 return redirect(url_for('views.home'))
             
-            return render_template('recommendations.html', user = current_user, recommendations = rec)
+            # Generate CSRF token
+            csrf_token = generate_csrf()
+
+            return render_template('recommendations.html', user=current_user, recommendations=rec, csrf_token=csrf_token)
 
         return redirect(url_for('views.home'))
-    return render_template("recommendations.html", user = current_user)
+    return render_template("recommendations.html", user=current_user)
     
 @views.route("/save_song", methods=["POST"])
 @login_required
@@ -85,6 +89,7 @@ def save_song():
             flash('Song Added!', category='success')
     # Goes back to home page with selected song
     return redirect(url_for('views.recommendations', user = current_user))
+
 
 @views.route("/remove_song", methods=["POST"])
 @login_required

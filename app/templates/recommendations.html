@@ -4,21 +4,73 @@
 {% block content %}
     <h1 align="center"> Recommended Songs </h1>
     <div align="center">
-        <form id="recommendationsForm" method="post" action="{{ url_for('views.save_song') }}">
-            <ul class="recommendlist">
-                {% if recommendations %}
-                    {% for song in recommendations %}
-                        <li>
-                            <strong>{{ song.name }}</strong> by {{ song.artist }}
-                            <button type="submit" name="saved_song_details" value="{{ song }}">
-                                Save
-                            </button>
-                        </li>
-                    {% endfor %}
-                {% else %}
-                    <li>No recommendations available.</li>
-                {% endif %}
-            </ul>
-        </form>
+        <ul class="recommendlist">
+            {% if recommendations %}
+                {% for song in recommendations %}
+                    <li>
+                        <strong class="song-name">{{ song.name }}</strong> by <span class="artist-name">{{ song.artist }}</span>
+                        <button type="button" class="save-song" data-id="{{ song.id }}" onclick="saveSong(this, '{{ song.id }}')">Save</button>
+                    </li>
+                {% endfor %}
+            {% else %}
+                <li>No recommendations available.</li>
+            {% endif %}
+        </ul>
     </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function saveSong(button, songId) {
+    // Find the closest ancestor <li> element of the clicked button
+    let listItem = button.parentNode;
+    while (listItem && listItem.nodeName !== 'LI') {
+        listItem = listItem.parentNode;
+    }
+    
+    if (listItem) {
+        const songNameElement = listItem.querySelector(".song-name");
+        const artistNameElement = listItem.querySelector(".artist-name");
+        
+        // Check if the elements are found before accessing innerText
+        if (songNameElement && artistNameElement) {
+            const songName = songNameElement.innerText;
+            const artistName = artistNameElement.innerText;
+
+            const savedSongDetails = {
+                name: songName,
+                artist: artistName
+            };
+
+            const formData = new FormData();
+            formData.append("song_id", songId);
+            formData.append("saved_song_details", JSON.stringify(savedSongDetails));
+
+            fetch("/save_song", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}"
+                }
+            })
+            .then(function (response) {
+                if (response.ok) {
+                    console.log("Song saved successfully");
+                    // Remove the button element from the DOM
+                    button.remove();
+                } else {
+                    console.error("Failed to save song");
+                }
+            })
+            .catch(function (error) {
+                console.error("Error:", error);
+            });
+        } else {
+            console.error("Song details not found.");
+        }
+    } else {
+        console.error("Parent <li> element not found.");
+    }
+}
+</script>
 {% endblock %}
