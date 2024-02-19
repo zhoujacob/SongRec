@@ -86,8 +86,24 @@ def save_song():
     # Goes back to home page with selected song
     return redirect(url_for('views.recommendations', user = current_user))
 
+@views.route("/remove_song", methods=["POST"])
+@login_required
+def remove_song():
+    if request.method == 'POST':
+        song_id = request.form['song_id']
+        if song_id:
+            song_to_remove = Saved.query.get(song_id)
+            if song_to_remove:
+                db.session.delete(song_to_remove)
+                db.session.commit()
+                flash('Song Removed Successfully', category = 'success')
+            else:
+                flash('Song Not Removed', category = 'error')
+        else:
+            flash('No song ID provided.', category = 'error')
+    return redirect(url_for('views.history', user = current_user))
 
-@views.route("/history")
+@views.route("/history", methods=["GET"])
 @login_required
 def history():
     conn = get_db_connection()

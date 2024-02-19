@@ -3,18 +3,22 @@
 {% block content %}
     <h1 align="center"> Saved Songs </h1>
 
-    <div align = "center">
-        <ul class = "savedsonglist">
-            {% if savedsongs %}
-                {% for song in savedsongs %}
-                    <li>
-                        {{ song[1] }} by {{ song[2] }}
-                    </li>
-                {% endfor %}
-            {% else %}
-                <li>No songs available.</li>
-            {% endif %}
-        </ul>
+    <div align="center">
+        <form id="savedsongList" method="post" action="{{ url_for('views.remove_song') }}">
+            <ul class="savedsonglist">
+                {% if savedsongs %}
+                    {% for song in savedsongs %}
+                        <li>
+                            {{ song[1] }} by {{ song[2] }}
+                            <button type="submit" name="song_id" value="{{ song[0] }}">
+                                Remove
+                            </button>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <li>No songs available.</li>
+                {% endif %}
+            </ul>
+        </form>        
     </div>
-
 {% endblock %}
